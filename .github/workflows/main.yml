@@ -1,0 +1,38 @@
+name: Build Linux Executable
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install Tkinter Linux Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y python3-tk
+
+    - name: Install Python Libraries
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller numpy matplotlib pillow
+
+    - name: Build with PyInstaller
+      run: pyinstaller --onefile --windowed hamosv2.py
+
+    - name: Upload the Executable
+      uses: actions/upload-artifact@v4
+      with:
+        name: hamosv2-linux-executable
+        path: dist/*
