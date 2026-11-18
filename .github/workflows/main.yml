@@ -7,21 +7,20 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
+    
+    # This runs the build inside an older Linux container with older GLIBC libraries
+    container:
+      image: python:3.11-bullseye
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
-
     - name: Install Tkinter Linux Dependencies
       run: |
-        sudo apt-get update
-        sudo apt-get install -y python3-tk
+        apt-get update
+        apt-get install -y python3-tk
 
     - name: Install Python Libraries
       run: |
